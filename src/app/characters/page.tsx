@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
+import PageHeader from "@/components/PageHeader";
 import SearchBar from "@/components/SearchBar";
 import { characters, searchCharacters } from "@/lib/knowledge-base";
 
@@ -11,65 +12,51 @@ export default function CharactersPage() {
 
   return (
     <PageLayout>
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-3xl sm:text-4xl text-amber-50 mb-3">
-            Browse Characters
-          </h1>
-          <p className="text-stone-400">
-            Find the hero, villain, or wanderer who mirrors your journey.
-          </p>
-        </div>
-
-        <SearchBar
-          placeholder="Search by name, emotion, or theme..."
-          onSearch={setQuery}
+      <div className="py-8 sm:py-12">
+        <PageHeader
+          title="Browse Characters"
+          description="Find the hero, villain, or wanderer who mirrors your journey."
         />
+        <SearchBar placeholder="Search by name, emotion, or theme..." onSearch={setQuery} />
 
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((char) => (
-            <article
-              key={char.id}
-              className="group p-6 rounded-2xl border border-stone-800/50 bg-stone-900/20 hover:border-amber-700/30 hover:bg-amber-950/10 transition-all duration-300"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h2 className="font-serif text-xl text-amber-100 group-hover:text-amber-50 transition-colors">
-                    {char.name}
-                  </h2>
-                  <p className="text-stone-500 text-sm">{char.source}</p>
-                </div>
-                <span className="px-2 py-0.5 rounded text-xs text-amber-600/70 bg-amber-950/30">
-                  {char.category}
-                </span>
-              </div>
-
-              <blockquote className="font-serif text-amber-200/70 italic text-sm mb-4 line-clamp-2">
-                &ldquo;{char.quote}&rdquo;
-              </blockquote>
-
-              <p className="text-stone-400 text-sm leading-relaxed mb-4">
-                {char.description}
-              </p>
-
-              <div className="flex flex-wrap gap-1.5">
-                {char.emotions.map((emotion) => (
-                  <span
-                    key={emotion}
-                    className="px-2 py-0.5 rounded-full text-xs text-stone-400 bg-stone-800/40 capitalize"
-                  >
-                    {emotion}
+        <div className="mt-8 sm:mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {filtered.map((char, i) => {
+            const colors = ["bg-white", "bg-[#f5f0e0]", "bg-[#ffb084]/20", "bg-[#b8a4ed]/20"];
+            return (
+              <article
+                key={char.id}
+                className={`p-5 sm:p-6 rounded-2xl border border-[#e5e5e5] ${colors[i % 4]}`}
+              >
+                <div className="flex items-start justify-between mb-3 gap-2">
+                  <div className="min-w-0">
+                    <h2 className="font-serif text-lg sm:text-xl text-[#0a0a0a]">{char.name}</h2>
+                    <p className="text-[#9a9a9a] text-sm">{char.source}</p>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-lg text-[10px] font-semibold text-[#6a6a6a] bg-white/80 flex-shrink-0">
+                    {char.category}
                   </span>
-                ))}
-              </div>
-            </article>
-          ))}
+                </div>
+                <blockquote className="font-serif text-[#3a3a3a] italic text-sm mb-4 line-clamp-2">
+                  &ldquo;{char.quote}&rdquo;
+                </blockquote>
+                <p className="text-[#6a6a6a] text-sm leading-relaxed mb-4">{char.description}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {char.emotions.map((emotion) => (
+                    <span
+                      key={emotion}
+                      className="px-2 py-0.5 rounded-full text-xs text-[#6a6a6a] bg-white/70 capitalize"
+                    >
+                      {emotion}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         {filtered.length === 0 && (
-          <p className="text-center text-stone-500 mt-12">
-            No characters found. Try a different search.
-          </p>
+          <p className="text-center text-[#9a9a9a] mt-12">No characters found.</p>
         )}
       </div>
     </PageLayout>

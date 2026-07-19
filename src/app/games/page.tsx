@@ -1,4 +1,5 @@
 import PageLayout from "@/components/PageLayout";
+import PageHeader from "@/components/PageHeader";
 
 const games = [
   { title: "God of War", studio: "Santa Monica Studio", theme: "Redemption and fatherhood" },
@@ -16,25 +17,26 @@ const games = [
 export default function GamesPage() {
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-3xl sm:text-4xl text-amber-50 mb-3">
-            Games
-          </h1>
-          <p className="text-stone-400">
-            Interactive stories where you live the struggle yourself.
-          </p>
-        </div>
-
+      <div className="py-8 sm:py-12 max-w-4xl mx-auto">
+        <PageHeader
+          title="Games"
+          description="Interactive stories where you live the struggle yourself."
+        />
         <div className="grid sm:grid-cols-2 gap-4">
-          {games.map((game) => (
+          {games.map((game, i) => (
             <div
               key={game.title}
-              className="p-5 rounded-xl border border-stone-800/50 bg-stone-900/20 hover:border-amber-800/30 transition-colors"
+              className={`p-5 rounded-2xl border border-[#e5e5e5] ${
+                i % 2 === 0 ? "bg-[#1a3a3a] text-white" : "bg-white text-[#0a0a0a]"
+              }`}
             >
-              <h2 className="font-serif text-lg text-amber-100">{game.title}</h2>
-              <p className="text-stone-500 text-sm">{game.studio}</p>
-              <p className="text-stone-400 text-sm mt-2 italic">{game.theme}</p>
+              <h2 className="font-serif text-base sm:text-lg">{game.title}</h2>
+              <p className={`text-sm mt-1 ${i % 2 === 0 ? "text-white/60" : "text-[#9a9a9a]"}`}>
+                {game.studio}
+              </p>
+              <p className={`text-sm mt-2 italic ${i % 2 === 0 ? "text-white/80" : "text-[#6a6a6a]"}`}>
+                {game.theme}
+              </p>
             </div>
           ))}
         </div>

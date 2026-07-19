@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Shuffle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import LoadingReflection from "@/components/LoadingReflection";
+import PaperCard from "@/components/PaperCard";
+import QuoteBlock from "@/components/QuoteBlock";
 
 interface RandomParallel {
   situation: string;
@@ -41,12 +43,10 @@ export default function RandomPage() {
 
   return (
     <PageLayout>
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-3xl sm:text-4xl text-amber-50 mb-3">
-            Random Parallel
-          </h1>
-          <p className="text-stone-400">
+      <div className="py-8 sm:py-12 max-w-3xl mx-auto">
+        <div className="text-center mb-8 sm:mb-10">
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#0a0a0a]">Random Parallel</h1>
+          <p className="text-[#6a6a6a] mt-2 text-sm sm:text-base">
             A story parallel chosen at random — perhaps it&apos;s yours.
           </p>
         </div>
@@ -55,59 +55,56 @@ export default function RandomPage() {
 
         {error && (
           <div className="text-center py-16">
-            <p className="text-red-400/80 mb-4">{error}</p>
-            <button
-              onClick={fetchRandom}
-              className="text-amber-400 hover:text-amber-300 text-sm"
-            >
+            <p className="text-red-500 mb-4">{error}</p>
+            <button onClick={fetchRandom} className="text-[#0a0a0a] font-medium text-sm hover:underline">
               Try again
             </button>
           </div>
         )}
 
         {parallel && !loading && (
-          <article className="animate-fade-in space-y-8">
-            <div className="text-center">
-              <span className="inline-block px-3 py-1 rounded-full text-xs text-amber-400 bg-amber-950/30 mb-4 capitalize">
+          <article className="animate-fade-in space-y-6 sm:space-y-8">
+            <div className="text-center px-2">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-[#6a6a6a] bg-[#f5f0e0] mb-4 capitalize">
                 {parallel.emotion}
               </span>
-              <h2 className="font-serif text-xl sm:text-2xl text-amber-100/90 italic mb-6">
+              <h2 className="font-serif text-lg sm:text-xl text-[#0a0a0a] italic leading-relaxed">
                 {parallel.situation}
               </h2>
             </div>
 
             <div className="text-center">
-              <h3 className="font-serif text-3xl text-amber-50">
-                {parallel.character}
-              </h3>
-              <p className="text-stone-400 mt-1">{parallel.source}</p>
+              <h3 className="font-serif text-2xl sm:text-3xl text-[#0a0a0a]">{parallel.character}</h3>
+              <p className="text-[#6a6a6a] mt-1 text-sm sm:text-base">{parallel.source}</p>
             </div>
 
-            <blockquote className="text-center px-8">
-              <p className="font-serif text-lg text-amber-100/90 italic leading-relaxed">
-                &ldquo;{parallel.quote}&rdquo;
-              </p>
-            </blockquote>
+            <PaperCard tape tilt="left" padding="lg" className="bg-[#ffb084]/20">
+              <QuoteBlock
+                quote={parallel.quote}
+                character={parallel.character}
+                source={parallel.source}
+              />
+            </PaperCard>
 
-            <div className="prose-story">
+            <div className="prose-story px-1">
               {parallel.parallel.split("\n").map((para, i) => (
-                <p key={i} className="text-stone-300 leading-relaxed mb-4">
+                <p key={i} className="text-[#3a3a3a] leading-relaxed mb-4 text-sm sm:text-base">
                   {para}
                 </p>
               ))}
             </div>
 
-            <div className="flex items-center justify-center gap-4 pt-6 border-t border-amber-900/20">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-4">
               <button
                 onClick={fetchRandom}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-amber-800/30 text-amber-200 text-sm hover:bg-amber-900/20 transition-all"
+                className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-[#e5e5e5] bg-white text-[#0a0a0a] text-sm font-semibold hover:bg-[#faf5e8] transition-colors"
               >
                 <Shuffle className="w-4 h-4" />
                 Another parallel
               </button>
               <Link
                 href="/"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-700 to-amber-600 text-amber-50 text-sm hover:from-amber-600 hover:to-amber-500 transition-all"
+                className="flex items-center justify-center px-5 py-3 rounded-xl bg-[#0a0a0a] text-white text-sm font-semibold hover:bg-[#1f1f1f] transition-colors"
               >
                 Find my parallel
               </Link>

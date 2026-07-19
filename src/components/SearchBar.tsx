@@ -16,7 +16,7 @@ export default function SearchBar({
 
   return (
     <div className="relative max-w-xl mx-auto w-full">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9a9a]" />
       <input
         type="text"
         value={query}
@@ -25,7 +25,7 @@ export default function SearchBar({
           onSearch(e.target.value);
         }}
         placeholder={placeholder}
-        className="w-full pl-11 pr-4 py-3 rounded-xl border border-amber-900/20 bg-stone-900/40 text-stone-200 placeholder:text-stone-500 focus:outline-none focus:border-amber-700/40 transition-colors"
+        className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#e5e5e5] bg-white text-[#0a0a0a] placeholder:text-[#9a9a9a] focus:outline-none focus:border-[#0a0a0a] transition-colors text-sm sm:text-base"
       />
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -8,7 +8,9 @@ import PageLayout from "@/components/PageLayout";
 import ReflectionView from "@/components/ReflectionView";
 import LoadingReflection from "@/components/LoadingReflection";
 import PromptBox from "@/components/PromptBox";
+import PageHeader from "@/components/PageHeader";
 import type { Reflection } from "@/lib/types";
+import { useEffect, useState } from "react";
 
 function ReflectContent() {
   const searchParams = useSearchParams();
@@ -33,11 +35,7 @@ function ReflectContent() {
         });
 
         const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
         setReflection(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Something went wrong");
@@ -51,27 +49,25 @@ function ReflectContent() {
 
   if (!query) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <h1 className="font-serif text-3xl text-amber-50 mb-4">Reflect</h1>
-        <p className="text-stone-400 mb-8">
-          Share what&apos;s on your mind and discover your story parallel.
-        </p>
+      <div className="py-10 sm:py-16 max-w-2xl mx-auto text-center">
+        <PageHeader
+          title="Reflect"
+          description="Share what's on your mind and discover your story parallel."
+        />
         <PromptBox size="medium" />
       </div>
     );
   }
 
-  if (loading) {
-    return <LoadingReflection />;
-  }
+  if (loading) return <LoadingReflection />;
 
   if (error) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center">
-        <p className="text-red-400/80 mb-6">{error}</p>
+      <div className="max-w-lg mx-auto py-16 text-center">
+        <p className="text-red-500 mb-6">{error}</p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-amber-300 hover:text-amber-200 transition-colors"
+          className="inline-flex items-center gap-2 text-[#0a0a0a] font-medium hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
           Try again
@@ -82,12 +78,12 @@ function ReflectContent() {
 
   if (reflection) {
     return (
-      <div className="px-4 py-12">
+      <div className="py-8 sm:py-12">
         <ReflectionView reflection={reflection} />
-        <div className="text-center mt-12 pb-8">
+        <div className="text-center mt-10 pb-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-amber-400/70 hover:text-amber-300 transition-colors text-sm"
+            className="inline-flex items-center gap-2 text-[#6a6a6a] hover:text-[#0a0a0a] text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
             Reflect on something else

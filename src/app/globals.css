@@ -1,33 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0a09;
-  --foreground: #e7e5e4;
-  --amber-glow: #d4a574;
-  --amber-deep: #92400e;
+  --canvas: #fffaf0;
+  --surface-soft: #faf5e8;
+  --surface-card: #f5f0e0;
+  --surface-strong: #ebe6d6;
+  --ink: #0a0a0a;
+  --body: #3a3a3a;
+  --muted: #6a6a6a;
+  --muted-soft: #9a9a9a;
+  --hairline: #e5e5e5;
+  --tape: #eedcc8;
+  --highlight: #eedcc8;
+  --brand-pink: #ff4d8b;
+  --brand-teal: #1a3a3a;
+  --brand-lavender: #b8a4ed;
+  --brand-peach: #ffb084;
+  --brand-ochre: #e8b94a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
+  --font-script: var(--font-caveat);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--canvas);
+  color: var(--body);
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 .font-serif {
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+.font-script {
+  font-family: var(--font-caveat), cursive;
+}
+
+.paper-texture {
+  background-color: var(--canvas);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.highlight-word {
+  font-style: italic;
+  background: linear-gradient(transparent 60%, var(--highlight) 60%);
+  padding: 0 2px;
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -36,32 +64,40 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+  animation: fade-in 0.7s ease-out forwards;
 }
 
 .prose-story p {
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--body);
+}
+
+@media (min-width: 640px) {
+  .prose-story p {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
 }
 
 ::selection {
-  background: rgba(217, 119, 6, 0.3);
-  color: #fef3c7;
+  background: rgba(232, 185, 74, 0.35);
+  color: var(--ink);
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0c0a09;
+  background: var(--canvas);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #44403c;
+  background: var(--hairline);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #57534e;
+  background: var(--muted-soft);
 }

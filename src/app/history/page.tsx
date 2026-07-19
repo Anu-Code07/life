@@ -1,4 +1,6 @@
 import PageLayout from "@/components/PageLayout";
+import PageHeader from "@/components/PageHeader";
+import PaperCard from "@/components/PaperCard";
 
 const figures = [
   {
@@ -54,35 +56,29 @@ const figures = [
 export default function HistoryPage() {
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-3xl sm:text-4xl text-amber-50 mb-3">
-            History
-          </h1>
-          <p className="text-stone-400">
-            Real lives that echo the greatest stories ever told.
-          </p>
-        </div>
-
-        <div className="space-y-6">
-          {figures.map((figure) => (
-            <article
+      <div className="py-8 sm:py-12 max-w-3xl mx-auto">
+        <PageHeader
+          title="History"
+          description="Real lives that echo the greatest stories ever told."
+        />
+        <div className="space-y-5">
+          {figures.map((figure, i) => (
+            <PaperCard
               key={figure.name}
-              className="p-6 sm:p-8 rounded-2xl border border-stone-800/50 bg-stone-900/20 hover:border-amber-800/30 transition-colors"
+              tape={i === 0}
+              tilt={i % 2 === 0 ? "right" : "left"}
+              padding="md"
+              className={i % 3 === 0 ? "bg-[#faf5e8]" : "bg-white"}
             >
-              <div className="flex items-start justify-between mb-3">
-                <h2 className="font-serif text-2xl text-amber-100">
-                  {figure.name}
-                </h2>
-                <span className="text-xs text-stone-600">{figure.era}</span>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <h2 className="font-serif text-xl sm:text-2xl text-[#0a0a0a]">{figure.name}</h2>
+                <span className="text-xs text-[#9a9a9a] flex-shrink-0">{figure.era}</span>
               </div>
-              <p className="text-stone-300 leading-relaxed mb-4">
-                {figure.story}
-              </p>
-              <blockquote className="font-serif text-amber-200/70 italic border-l-2 border-amber-700/40 pl-4">
+              <p className="text-[#3a3a3a] leading-relaxed text-sm sm:text-base mb-4">{figure.story}</p>
+              <blockquote className="font-serif text-[#0a0a0a] italic border-l-[3px] border-[#eedcc8] pl-4 text-sm sm:text-base">
                 &ldquo;{figure.quote}&rdquo;
               </blockquote>
-            </article>
+            </PaperCard>
           ))}
         </div>
       </div>
