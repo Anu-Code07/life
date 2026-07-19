@@ -17,8 +17,13 @@ export default function ReflectionView({ reflection }: ReflectionViewProps) {
     setSaved(true);
   };
 
-  const { analysis, primaryMatch, similarStories, recommendations, closingThought } =
-    reflection;
+  const {
+    analysis,
+    primaryMatch,
+    similarStories = [],
+    recommendations = { books: [], movies: [], games: [], philosophy: [] },
+    closingThought,
+  } = reflection;
 
   return (
     <div className="max-w-3xl mx-auto space-y-10 animate-fade-in">
@@ -131,12 +136,12 @@ export default function ReflectionView({ reflection }: ReflectionViewProps) {
       {/* Recommendations */}
       <section className="grid sm:grid-cols-2 gap-6">
         {[
-          { title: "Books", items: recommendations.books, emoji: "📚" },
-          { title: "Movies & Shows", items: recommendations.movies, emoji: "🎬" },
-          { title: "Games", items: recommendations.games, emoji: "🎮" },
-          { title: "Philosophy", items: recommendations.philosophy, emoji: "🏛️" },
+          { title: "Books", items: recommendations.books ?? [], emoji: "📚" },
+          { title: "Movies & Shows", items: recommendations.movies ?? [], emoji: "🎬" },
+          { title: "Games", items: recommendations.games ?? [], emoji: "🎮" },
+          { title: "Philosophy", items: recommendations.philosophy ?? [], emoji: "🏛️" },
         ]
-          .filter((section) => section.items.length > 0)
+          .filter((section) => (section.items?.length ?? 0) > 0)
           .map((section) => (
             <div
               key={section.title}

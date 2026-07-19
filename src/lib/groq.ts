@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import type { Reflection } from "./types";
+import { normalizeReflection } from "./normalize";
 import { SYSTEM_PROMPT, buildReflectionPrompt } from "./prompts";
 
 const groq = new Groq({
@@ -36,12 +37,9 @@ export async function generateReflection(
     throw new Error("No response from AI");
   }
 
-  const parsed = parseJsonResponse<Omit<Reflection, "id" | "createdAt" | "userInput">>(content);
+  const parsed = parseJsonResponse<Partial<Reflection>>(content);
 
-  return {
-    userInput,
-    ...parsed,
-  };
+  return normalizeReflection({ ...parsed, userInput });
 }
 
 export async function generateDailyStory(): Promise<{
