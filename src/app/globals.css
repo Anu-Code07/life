@@ -244,6 +244,115 @@ body {
   animation: page-flip 1.2s ease-in-out infinite;
 }
 
+/* Book loader scene */
+.loader-book-scene {
+  position: relative;
+  width: 160px;
+  height: 110px;
+  perspective: 600px;
+}
+
+@media (min-width: 640px) {
+  .loader-book-scene {
+    width: 200px;
+    height: 130px;
+  }
+}
+
+.loader-book-base {
+  position: absolute;
+  inset: 4px 0;
+  background: #f5f0e0;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 0 8px 24px rgba(26, 21, 16, 0.12);
+}
+
+.loader-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(26, 21, 16, 0.08),
+    rgba(26, 21, 16, 0.18),
+    rgba(26, 21, 16, 0.08)
+  );
+  z-index: 5;
+}
+
+.loader-page {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: calc(50% - 2px);
+  background: #fffef9;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.loader-page-left {
+  left: 4px;
+  border-radius: 2px 0 0 2px;
+  border-right: 1px solid rgba(26, 21, 16, 0.05);
+}
+
+.loader-page-right {
+  right: 4px;
+  border-radius: 0 6px 6px 0;
+  transform-origin: left center;
+  border-left: 1px solid rgba(26, 21, 16, 0.04);
+}
+
+.loader-page-flip {
+  animation: loader-page-turn 1.8s ease-in-out infinite;
+  z-index: 3;
+  box-shadow: -2px 0 8px rgba(26, 21, 16, 0.06);
+}
+
+@keyframes loader-page-turn {
+  0%, 100% {
+    transform: rotateY(0deg);
+  }
+  45% {
+    transform: rotateY(-75deg);
+  }
+  55% {
+    transform: rotateY(-75deg);
+  }
+}
+
+.loader-line {
+  height: 5px;
+  background: #ebe6d6;
+  border-radius: 2px;
+  animation: loader-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes loader-shimmer {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.loader-dots span {
+  animation: loader-dot 1.4s ease-in-out infinite;
+  opacity: 0;
+}
+
+.loader-dots span:nth-child(1) { animation-delay: 0s; }
+.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loader-dot {
+  0%, 60%, 100% { opacity: 0; }
+  30% { opacity: 1; }
+}
+
 .prose-book {
   font-size: 0.9375rem;
   line-height: 1.8;
