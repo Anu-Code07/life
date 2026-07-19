@@ -7,11 +7,14 @@ interface PageLayoutProps {
 
 export default function PageLayout({ children, className = "" }: PageLayoutProps) {
   return (
-    <div className="relative min-h-screen text-[#3a3a3a]">
+    <div className="relative min-h-screen book-desk text-[#3d3830]">
       <Navigation />
-      <main className={`relative z-10 pt-14 sm:pt-16 ${className}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
+      <main className={`relative z-10 pt-14 ${className}`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">{children}</div>
       </main>
+      <footer className="text-center py-8 text-[10px] text-[#9a948c] tracking-widest">
+        — STORY MIRROR —
+      </footer>
     </div>
   );
 }

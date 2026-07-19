@@ -26,7 +26,6 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
   const handleSubmit = async (text?: string) => {
     const value = (text ?? input).trim();
     if (!value || loading) return;
-
     setLoading(true);
     router.push(`/reflect?q=${encodeURIComponent(value)}`);
   };
@@ -38,11 +37,10 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
       <div className="relative">
         <PaperTape width="w-16 sm:w-20" />
         <div
-          className={`relative bg-white rounded-lg sm:rounded-xl border border-[#e5e5e5] shadow-[0_4px_20px_rgba(10,10,10,0.06)] ${
-            isLarge ? "p-4 sm:p-5" : "p-3 sm:p-4"
-          }`}
+          className="relative bg-[#fffef9] rounded-sm border border-[#e0d9ce] shadow-[0_4px_20px_rgba(26,21,16,0.08)] book-page !p-4 sm:!p-5 !min-h-0"
+          style={{ boxShadow: "inset 0 0 40px rgba(26,21,16,0.02), 0 4px 20px rgba(26,21,16,0.08)" }}
         >
-          <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.12em] text-[#9a9a9a] mb-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.12em] text-[#9a948c] mb-2">
             Your page · write freely
           </p>
           <textarea
@@ -56,26 +54,22 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
             }}
             placeholder="What's weighing on your mind?"
             rows={isLarge ? 2 : 2}
-            className={`w-full bg-transparent text-[#0a0a0a] placeholder:text-[#9a9a9a] resize-none focus:outline-none font-serif leading-snug min-h-[3rem] ${
+            className={`w-full bg-transparent text-[#1a1510] placeholder:text-[#9a948c] resize-none focus:outline-none font-serif leading-snug min-h-[2.5rem] ${
               isLarge ? "text-base sm:text-lg" : "text-sm sm:text-base"
             }`}
             disabled={loading}
           />
-
-          <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-[#f0f0f0]">
-            <span className="text-[10px] sm:text-xs text-[#9a9a9a]">
+          <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-[#ebe6d6]">
+            <span className="text-[10px] sm:text-xs text-[#9a948c]">
               {input.length > 0 ? `${input.length} chars` : "Enter to reflect"}
             </span>
             <button
               onClick={() => handleSubmit()}
               disabled={!input.trim() || loading}
-              className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#0a0a0a] text-white font-semibold text-xs sm:text-sm hover:bg-[#1f1f1f] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1a1510] text-white font-semibold text-xs sm:text-sm hover:bg-[#2a2420] disabled:opacity-40 transition-colors"
             >
               {loading ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ...
-                </>
+                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
@@ -88,7 +82,7 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
       </div>
 
       {isLarge && (
-        <div className="mt-4 sm:mt-5 flex flex-wrap justify-center gap-1.5">
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5">
           {examples.map((example) => (
             <button
               key={example}
@@ -96,7 +90,7 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
                 setInput(example);
                 handleSubmit(example);
               }}
-              className="px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs text-[#6a6a6a] border border-[#e5e5e5] bg-white hover:bg-[#faf5e8] hover:text-[#0a0a0a] transition-all"
+              className="px-2.5 py-1.5 rounded-full text-[11px] sm:text-xs text-[#6b6560] border border-[#e0d9ce] bg-[#fffef9]/80 hover:bg-white transition-all"
             >
               {example}
             </button>

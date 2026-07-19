@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Bookmark, BookmarkCheck, Check, Share2 } from "lucide-react";
 import type { Reflection } from "@/lib/types";
 import { saveReflection, isReflectionSaved } from "@/lib/storage";
-import PaperCard from "./PaperCard";
-import QuoteBlock from "./QuoteBlock";
+import BookSpread from "./BookSpread";
+import BookPage from "./BookPage";
+import ChapterDivider from "./ChapterDivider";
+import DropCap from "./DropCap";
 
 interface ReflectionViewProps {
   reflection: Reflection;
@@ -14,250 +16,191 @@ interface ReflectionViewProps {
 export default function ReflectionView({ reflection }: ReflectionViewProps) {
   const [saved, setSaved] = useState(() => isReflectionSaved(reflection.id));
   const [shared, setShared] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+
+  const { primaryMatch, similarStories = [], recommendations, closingThought } = reflection;
 
   const handleSave = () => {
     saveReflection(reflection);
     setSaved(true);
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 600);
   };
 
   const buildShareText = () => {
-    const { primaryMatch, closingThought } = reflection;
     const attribution = primaryMatch.quoteAuthor
       ? `— ${primaryMatch.quoteAuthor}`
       : `— ${primaryMatch.character}, ${primaryMatch.source}`;
-
     return `"${primaryMatch.quote}"\n${attribution}\n\n${closingThought}\n\n— Story Mirror`;
   };
 
   const handleShare = async () => {
     const text = buildShareText();
-
     try {
       if (navigator.share) {
-        await navigator.share({
-          title: `${reflection.primaryMatch.character} — Story Mirror`,
-          text,
-        });
-        setShared(true);
-        setTimeout(() => setShared(false), 2000);
-        return;
+        await navigator.share({ title: `${primaryMatch.character} — Story Mirror`, text });
+      } else {
+        await navigator.clipboard.writeText(text);
       }
-
-      await navigator.clipboard.writeText(text);
       setShared(true);
       setTimeout(() => setShared(false), 2000);
     } catch (err) {
       if ((err as Error).name === "AbortError") return;
-
       try {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
+        await navigator.clipboard.writeText(text);
         setShared(true);
         setTimeout(() => setShared(false), 2000);
       } catch {
-        window.prompt("Copy this quote:", text);
+        window.prompt("Copy:", text);
       }
     }
   };
 
-  const {
-    analysis,
-    primaryMatch,
-    similarStories = [],
-    recommendations = { books: [], movies: [], games: [], philosophy: [] },
-    closingThought,
-  } = reflection;
+  const furtherReading = [
+    ...(recommendations?.books ?? []).map((b) => `📖 ${b}`),
+    ...(recommendations?.movies ?? []).map((m) => `🎬 ${m}`),
+    ...(recommendations?.games ?? []).map((g) => `🎮 ${g}`),
+    ...(recommendations?.philosophy ?? []).map((p) => `🏛 ${p}`),
+  ];
+
+  const storyFirstChar = primaryMatch.storyParallel.trim()[0] ?? "";
+  const storyRest = primaryMatch.storyParallel.trim().slice(1);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8 animate-fade-in pb-8">
-      {/* User input — torn page feel */}
-      <div className="text-center px-2">
-        <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] text-[#9a9a9a] mb-2">
-          Your reflection
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-10">
+      {/* Chapter header */}
+      <header className="text-center px-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9a948c] mb-2">
+          Chapter · {primaryMatch.character}
         </p>
-        <p className="font-serif text-lg sm:text-xl md:text-2xl text-[#0a0a0a] italic leading-snug">
+        <p className="font-serif italic text-base sm:text-lg text-[#6b6560] mb-1">
           &ldquo;{reflection.userInput}&rdquo;
         </p>
-      </div>
-
-      {/* Character header */}
-      <div className="text-center">
-        <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] text-[#9a9a9a] mb-1">
-          Your Story Parallel
-        </p>
-        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#0a0a0a] tracking-tight">
+        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#1a1510] tracking-tight">
           {primaryMatch.character}
-        </h2>
-        <p className="text-[#6a6a6a] text-sm sm:text-base mt-1">
-          from <span className="font-medium text-[#3a3a3a]">{primaryMatch.source}</span>
+        </h1>
+        <p className="text-sm text-[#9a948c] mt-1 font-script text-base">
+          from {primaryMatch.source}
         </p>
-      </div>
+      </header>
 
-      {/* Quote — first, with tape */}
-      <PaperCard tape tilt="right" padding="lg" className="bg-[#faf5e8]">
-        <QuoteBlock
-          quote={primaryMatch.quote}
-          author={primaryMatch.quoteAuthor}
-          character={primaryMatch.character}
-          source={primaryMatch.source}
-          onShare={handleShare}
-          shared={shared}
-        />
-      </PaperCard>
-
-      {/* Why it fits */}
-      <PaperCard padding="md">
-        <h3 className="font-serif text-lg sm:text-xl text-[#0a0a0a] mb-3">
-          Why it fits
-        </h3>
-        <p className="text-[#3a3a3a] leading-relaxed text-sm sm:text-base">
-          {primaryMatch.whyItFits}
-        </p>
-      </PaperCard>
-
-      {/* Story */}
-      <section>
-        <h3 className="font-serif text-lg sm:text-xl text-[#0a0a0a] mb-3 px-1">
-          The Story
-        </h3>
-        <p className="text-[#3a3a3a] leading-relaxed text-sm sm:text-base px-1">
-          {primaryMatch.storyParallel}
-        </p>
-      </section>
-
-      {/* Reflection */}
-      <PaperCard padding="md" className="bg-[#f5f0e0]">
-        <h3 className="font-serif text-lg sm:text-xl text-[#0a0a0a] mb-3">
-          Reflection
-        </h3>
-        <p className="text-[#3a3a3a] leading-relaxed text-sm sm:text-base">
-          {primaryMatch.reflection}
-        </p>
-        <p className="mt-5 font-serif text-base sm:text-lg text-[#0a0a0a] italic border-l-[3px] border-[#e8b94a] pl-4">
-          {primaryMatch.lifeLesson}
-        </p>
-      </PaperCard>
-
-      {/* Emotional landscape */}
-      <div className="rounded-2xl border border-[#e5e5e5] bg-white p-4 sm:p-6">
-        <h3 className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] text-[#9a9a9a] mb-4">
-          Emotional Landscape
-        </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          {[
-            { label: "Primary", value: analysis.primaryEmotion },
-            { label: "Secondary", value: analysis.secondaryEmotion },
-            { label: "Archetype", value: analysis.narrativeArchetype },
-            { label: "Hero Stage", value: analysis.heroStage },
-          ].map((item) => (
-            <div key={item.label} className="bg-[#faf5e8] rounded-xl p-3">
-              <p className="text-[10px] sm:text-xs text-[#9a9a9a] mb-1">{item.label}</p>
-              <p className="text-sm text-[#0a0a0a] font-medium capitalize">{item.value}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Similar stories */}
-      {similarStories.length > 0 && (
-        <section>
-          <h3 className="font-serif text-lg sm:text-xl text-[#0a0a0a] mb-4">
-            Similar Stories
-          </h3>
-          <div className="grid gap-3">
-            {similarStories.map((story, i) => {
-              const colors = ["bg-[#b8a4ed]", "bg-[#ffb084]", "bg-[#e8b94a]", "bg-[#a4d4c5]", "bg-[#f5f0e0]"];
-              const bg = colors[i % colors.length];
-              const textDark = bg === "bg-[#f5f0e0]" || bg === "bg-[#a4d4c5]";
-              return (
-                <div
-                  key={`${story.character}-${story.source}`}
-                  className={`flex items-start gap-3 sm:gap-4 p-4 rounded-2xl ${bg} ${textDark ? "text-[#0a0a0a]" : "text-white"}`}
-                >
-                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 ${textDark ? "bg-white/60" : "bg-white/20"}`}>
-                    <span className="font-serif text-sm">{story.character[0]}</span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm sm:text-base">
-                      {story.character}{" "}
-                      <span className={`font-normal text-xs sm:text-sm ${textDark ? "text-[#6a6a6a]" : "text-white/70"}`}>
-                        · {story.source}
-                      </span>
-                    </p>
-                    <p className={`text-xs sm:text-sm mt-1 leading-relaxed ${textDark ? "text-[#3a3a3a]" : "text-white/85"}`}>
-                      {story.reason}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+      {/* Open book spread — quote left, why it fits right */}
+      <BookSpread showBookmark bookmarked={saved || justSaved}>
+        <BookPage side="left" pageNumber={1}>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9a948c] mb-6 text-center">
+            Epigraph
+          </p>
+          <blockquote className="text-center px-2">
+            <span className="block font-serif text-6xl sm:text-7xl text-[#ebe6d6] leading-none mb-2 select-none">
+              &ldquo;
+            </span>
+            <p className="font-serif text-lg sm:text-xl italic text-[#1a1510] leading-relaxed">
+              {primaryMatch.quote}
+            </p>
+            <cite className="block mt-4 text-xs sm:text-sm text-[#9a948c] not-italic">
+              — {primaryMatch.quoteAuthor ?? `${primaryMatch.character}, ${primaryMatch.source}`}
+            </cite>
+          </blockquote>
+          <div className="flex justify-center gap-2 mt-6">
+            <button
+              onClick={handleShare}
+              className="text-xs px-3 py-1.5 rounded-lg border border-[#e0d9ce] text-[#6b6560] hover:bg-[#faf5e8] transition-colors"
+            >
+              {shared ? "Copied!" : "Share"}
+            </button>
           </div>
-        </section>
+        </BookPage>
+
+        <BookPage side="right" pageNumber={2}>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9a948c] mb-4">
+            Why it fits
+          </p>
+          <p className="prose-book text-sm sm:text-base">{primaryMatch.whyItFits}</p>
+          <ChapterDivider />
+          <p className="margin-note text-xs sm:text-sm">{primaryMatch.lifeLesson}</p>
+        </BookPage>
+      </BookSpread>
+
+      {/* Story prose */}
+      <BookSpread variant="single">
+        <BookPage side="single" pageNumber={3}>
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9a948c] mb-4">
+            The Story
+          </p>
+          <DropCap>
+            {storyFirstChar}
+            {storyRest}
+          </DropCap>
+          <ChapterDivider />
+          <p className="prose-book text-sm sm:text-base">{primaryMatch.reflection}</p>
+        </BookPage>
+      </BookSpread>
+
+      {/* Margin notes — similar stories */}
+      {similarStories.length > 0 && (
+        <div className="px-2">
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9a948c] mb-4 text-center">
+            Margin Notes
+          </p>
+          <div className="space-y-3 max-w-lg mx-auto">
+            {similarStories.map((story) => (
+              <p key={`${story.character}-${story.source}`} className="margin-note text-sm">
+                <strong className="text-[#1a1510] not-italic font-medium">
+                  {story.character}
+                </strong>{" "}
+                <span className="text-[#9a948c]">({story.source})</span> — {story.reason}
+              </p>
+            ))}
+          </div>
+        </div>
       )}
 
-      {/* Recommendations */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {[
-          { title: "Books", items: recommendations.books ?? [], emoji: "📚", color: "bg-[#f5f0e0]" },
-          { title: "Movies & Shows", items: recommendations.movies ?? [], emoji: "🎬", color: "bg-[#ffb084]/30" },
-          { title: "Games", items: recommendations.games ?? [], emoji: "🎮", color: "bg-[#b8a4ed]/30" },
-          { title: "Philosophy", items: recommendations.philosophy ?? [], emoji: "🏛️", color: "bg-[#e8b94a]/25" },
-        ]
-          .filter((section) => (section.items?.length ?? 0) > 0)
-          .map((section) => (
-            <div
-              key={section.title}
-              className={`rounded-2xl border border-[#e5e5e5] p-4 sm:p-5 ${section.color}`}
-            >
-              <h4 className="text-[#0a0a0a] text-sm font-semibold mb-3">
-                {section.emoji} {section.title}
-              </h4>
-              <ul className="space-y-2">
-                {section.items.map((item) => (
-                  <li key={item} className="text-[#3a3a3a] text-xs sm:text-sm leading-relaxed">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-      </section>
+      {/* Further reading */}
+      {furtherReading.length > 0 && (
+        <div className="max-w-md mx-auto px-4">
+          <ChapterDivider />
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9a948c] mb-3 text-center">
+            Further Reading
+          </p>
+          <ul className="space-y-1.5 text-sm text-[#6b6560]">
+            {furtherReading.map((item) => (
+              <li key={item} className="text-center font-serif italic">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-      {/* Closing thought */}
-      <PaperCard tape tilt="left" padding="lg" className="text-center bg-white">
-        <p className="font-serif text-lg sm:text-xl md:text-2xl text-[#0a0a0a] italic leading-relaxed">
+      {/* Closing */}
+      <blockquote className="text-center px-4 max-w-xl mx-auto">
+        <p className="font-serif text-lg sm:text-xl italic text-[#1a1510] leading-relaxed">
           {closingThought}
         </p>
-      </PaperCard>
+      </blockquote>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <button
           onClick={handleSave}
           disabled={saved}
-          className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-[#e5e5e5] bg-white text-[#0a0a0a] text-sm font-semibold hover:bg-[#faf5e8] disabled:opacity-60 transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#e0d9ce] bg-white text-[#1a1510] text-sm font-medium hover:bg-[#faf5e8] disabled:opacity-60 transition-all w-full sm:w-auto justify-center"
         >
           {saved ? (
             <>
-              <BookmarkCheck className="w-4 h-4" />
-              Saved
+              <BookmarkCheck className="w-4 h-4 text-[#c45c4a]" />
+              Bookmarked
             </>
           ) : (
             <>
               <Bookmark className="w-4 h-4" />
-              Save Reflection
+              Bookmark this chapter
             </>
           )}
         </button>
         <button
           onClick={handleShare}
-          className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#0a0a0a] text-white text-sm font-semibold hover:bg-[#1f1f1f] transition-colors"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1a1510] text-white text-sm font-medium hover:bg-[#2a2420] transition-colors w-full sm:w-auto justify-center"
         >
           {shared ? (
             <>
@@ -267,7 +210,7 @@ export default function ReflectionView({ reflection }: ReflectionViewProps) {
           ) : (
             <>
               <Share2 className="w-4 h-4" />
-              Share Quote
+              Share quote
             </>
           )}
         </button>

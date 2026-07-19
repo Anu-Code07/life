@@ -5,8 +5,9 @@ import Link from "next/link";
 import { RefreshCw } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import LoadingReflection from "@/components/LoadingReflection";
-import PaperCard from "@/components/PaperCard";
-import QuoteBlock from "@/components/QuoteBlock";
+import BookSpread from "@/components/BookSpread";
+import BookPage from "@/components/BookPage";
+import DropCap from "@/components/DropCap";
 
 interface DailyStory {
   title: string;
@@ -22,6 +23,10 @@ export default function DailyPage() {
   const [story, setStory] = useState<DailyStory | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const dayOfYear = Math.floor(
+    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+  );
 
   const fetchDaily = async () => {
     setLoading(true);
@@ -45,72 +50,77 @@ export default function DailyPage() {
   return (
     <PageLayout>
       <div className="py-8 sm:py-12 max-w-3xl mx-auto">
-        <div className="text-center mb-8 sm:mb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#9a9a9a] mb-2">
-            {new Date().toLocaleDateString("en-US", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-            })}
+        <header className="text-center mb-8">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9a948c] mb-2">
+            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[#0a0a0a]">Daily Story</h1>
-          <p className="text-[#6a6a6a] mt-2 text-sm sm:text-base">
-            A story chosen for today&apos;s reflection.
-          </p>
-        </div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#1a1510]">Today&apos;s Chapter</h1>
+          <p className="font-script text-[#9a948c] text-lg mt-1">Chapter {dayOfYear}</p>
+        </header>
 
-        {loading && <LoadingReflection message="Choosing today's story..." />}
-
+        {loading && <LoadingReflection message="Opening today's chapter..." />}
         {error && (
           <div className="text-center py-16">
             <p className="text-red-500 mb-4">{error}</p>
-            <button onClick={fetchDaily} className="text-[#0a0a0a] font-medium text-sm hover:underline">
+            <button onClick={fetchDaily} className="text-sm font-medium hover:underline">
               Try again
             </button>
           </div>
         )}
 
         {story && !loading && (
-          <article className="animate-fade-in space-y-6 sm:space-y-8">
+          <article className="animate-fade-in space-y-6">
             <div className="text-center">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-[#6a6a6a] bg-[#f5f0e0] mb-4 capitalize">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-medium text-[#6b6560] bg-[#f5f0e0] mb-3 capitalize">
                 {story.theme}
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[#0a0a0a] mb-2">{story.title}</h2>
-              <p className="text-[#6a6a6a] text-sm sm:text-base">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[#1a1510]">{story.title}</h2>
+              <p className="text-[#9a948c] text-sm mt-1">
                 {story.character} · {story.source}
               </p>
             </div>
 
-            <PaperCard tape tilt="right" padding="lg" className="bg-[#faf5e8]">
-              <QuoteBlock
-                quote={story.quote}
-                character={story.character}
-                source={story.source}
-              />
-            </PaperCard>
-
-            <div className="prose-story px-1">
-              {story.reflection.split("\n").map((para, i) => (
-                <p key={i} className="text-[#3a3a3a] leading-relaxed mb-4 text-sm sm:text-base">
-                  {para}
+            <BookSpread showBookmark>
+              <BookPage side="left" pageNumber={dayOfYear * 2 - 1}>
+                <p className="text-[10px] uppercase tracking-wider text-[#9a948c] mb-4 text-center">
+                  Epigraph
                 </p>
-              ))}
-            </div>
+                <blockquote className="text-center">
+                  <span className="block font-serif text-5xl text-[#ebe6d6] leading-none mb-2">&ldquo;</span>
+                  <p className="font-serif text-lg italic text-[#1a1510] leading-relaxed">
+                    {story.quote}
+                  </p>
+                  <cite className="block mt-3 text-xs text-[#9a948c] not-italic">
+                    — {story.character}
+                  </cite>
+                </blockquote>
+              </BookPage>
+              <BookPage side="right" pageNumber={dayOfYear * 2}>
+                {story.reflection.split("\n").map((para, i) =>
+                  i === 0 ? (
+                    <DropCap key={i}>{para.trim()}</DropCap>
+                  ) : (
+                    <p key={i} className="prose-book text-sm mt-3">
+                      {para}
+                    </p>
+                  )
+                )}
+              </BookPage>
+            </BookSpread>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <button
                 onClick={fetchDaily}
-                className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-[#e5e5e5] bg-white text-[#0a0a0a] text-sm font-semibold hover:bg-[#faf5e8] transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#e0d9ce] bg-white text-sm font-medium hover:bg-[#faf5e8] w-full sm:w-auto justify-center"
               >
                 <RefreshCw className="w-4 h-4" />
-                Another story
+                Another chapter
               </button>
               <Link
                 href="/"
-                className="flex items-center justify-center px-5 py-3 rounded-xl bg-[#0a0a0a] text-white text-sm font-semibold hover:bg-[#1f1f1f] transition-colors"
+                className="flex items-center justify-center px-5 py-2.5 rounded-lg bg-[#1a1510] text-white text-sm font-medium hover:bg-[#2a2420] w-full sm:w-auto"
               >
-                Reflect on your life
+                Write your own
               </Link>
             </div>
           </article>

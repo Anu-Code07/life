@@ -96,3 +96,26 @@ export async function generateRandomParallel(): Promise<{
 
   return parseJsonResponse(content);
 }
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export async function generateChatReply(messages: ChatMessage[]): Promise<string> {
+  const { CHAT_SYSTEM_PROMPT } = await import("./prompts");
+
+  const completion = await groq.chat.completions.create({
+    model: MODEL,
+    messages: [
+      { role: "system", content: CHAT_SYSTEM_PROMPT },
+      ...messages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+    ],
+    temperature: 0.85,
+    max_tokens: 1024,
+  });
+
+  const content = completion.choices[0]?.message?.content;
+  if (!content) throw new Error("No response from AI");
+  return content.trim();
+}
