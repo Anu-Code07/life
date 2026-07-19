@@ -11,6 +11,7 @@ interface DailyStoryCardProps {
 
 const categoryColors: Record<string, string> = {
   Mythology: "bg-[#e8b94a]/25 text-[#6b5040]",
+  "Hindu Mythology": "bg-[#ff6b35]/15 text-[#8b3a1a]",
   Literature: "bg-[#f5f0e0] text-[#6b6560]",
   Film: "bg-[#ffb084]/30 text-[#6b5040]",
   Anime: "bg-[#b8a4ed]/30 text-[#4a4060]",
