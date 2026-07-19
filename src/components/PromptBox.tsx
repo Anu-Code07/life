@@ -27,7 +27,7 @@ export default function PromptBox({ size = "large" }: PromptBoxProps) {
     const value = (text ?? input).trim();
     if (!value || loading) return;
     setLoading(true);
-    router.push(`/reflect?q=${encodeURIComponent(value)}`);
+    router.push(`/?q=${encodeURIComponent(value)}`);
   };
 
   const isLarge = size === "large";

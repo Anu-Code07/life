@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getChapterForToday, getRandomChapter } from "@/lib/knowledge-base/daily-chapters";
+import { normalizeDailyChapter } from "@/lib/knowledge-base/normalize-daily-chapter";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     mode === "random" ? getRandomChapter(exclude) : getChapterForToday();
 
   return NextResponse.json({
-    ...chapter,
+    ...normalizeDailyChapter(chapter),
     chapterNumber: Math.floor(
       (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
     ),
