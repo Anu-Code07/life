@@ -37,6 +37,7 @@ function ReflectContent() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Something went wrong");
         setReflection(data);
+        window.scrollTo(0, 0);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Something went wrong");
       } finally {
@@ -78,7 +79,7 @@ function ReflectContent() {
 
   if (reflection) {
     return (
-      <div className="py-8 sm:py-12">
+      <div className="py-4 sm:py-8">
         <ReflectionView reflection={reflection} />
         <div className="text-center mt-10 pb-4">
           <Link
