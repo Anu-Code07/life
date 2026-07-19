@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Story Mirror
+
+AI that explains your life through fiction, mythology, literature, philosophy, and history.
+
+Describe what's weighing on your mind — not for advice, but to discover which character already lived your struggle.
+
+## Features
+
+- **Reflect** — Share your feelings and get a powerful story parallel powered by Groq AI
+- **Explore** — Browse stories, characters, and quotes from a curated knowledge base
+- **Daily Story** — A new AI-generated reflection each day
+- **Random Parallel** — Discover unexpected story connections
+- **Saved Reflections** — Bookmark reflections that resonate (stored locally)
+- **Browse** — Books, movies, games, philosophy, and historical figures
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Copy `.env.example` to `.env.local` and add your Groq API key:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Get a free API key at [console.groq.com](https://console.groq.com).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Install dependencies and run:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js 16** (App Router)
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Groq AI** (llama-3.3-70b-versatile)
+- **Framer Motion** & **Lucide React**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pages
 
-## Deploy on Vercel
+| Page | Description |
+|------|-------------|
+| `/` | Homepage with reflection prompt |
+| `/reflect` | AI-generated story parallel |
+| `/explore` | Browse stories, characters, quotes |
+| `/characters` | Character library |
+| `/quotes` | Quote collection |
+| `/books` | Book recommendations |
+| `/movies` | Movies & shows |
+| `/games` | Video games |
+| `/philosophy` | Philosophical traditions |
+| `/history` | Historical figures |
+| `/daily` | Daily AI story |
+| `/random` | Random parallel |
+| `/saved` | Saved reflections |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Philosophy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Not advice. Not therapy. Just the character who already lived your struggle.
+
+Every response connects emotions to stories — making users think: *"That's exactly how I feel."*
