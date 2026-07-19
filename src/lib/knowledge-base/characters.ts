@@ -1,0 +1,169 @@
+import type { Character } from "../types";
+
+export const characters: Character[] = [
+  {
+    id: "frodo",
+    name: "Frodo Baggins",
+    source: "The Lord of the Rings",
+    category: "Literature",
+    emotions: ["loss", "grief", "nostalgia", "exhaustion", "change"],
+    quote: "How do you pick up the threads of an old life? How do you go on, when in your heart you begin to understand there is no going back?",
+    description: "A hobbit who carried the weight of the world and returned home forever changed.",
+    themes: ["sacrifice", "transformation", "the cost of heroism", "inability to return"],
+  },
+  {
+    id: "kratos",
+    name: "Kratos",
+    source: "God of War",
+    category: "Games",
+    emotions: ["guilt", "rage", "redemption", "loss", "change"],
+    quote: "Do not be sorry. Be better.",
+    description: "The Ghost of Sparta who mourns the man he was while becoming someone his old self could never have been.",
+    themes: ["redemption", "fatherhood", "letting go of the past", "becoming better"],
+  },
+  {
+    id: "guts",
+    name: "Guts",
+    source: "Berserk",
+    category: "Manga",
+    emotions: ["trauma", "rage", "survival", "loss", "determination"],
+    quote: "If you're always worried about crushing the ants beneath you, you won't be able to walk.",
+    description: "A mercenary forged by suffering who refuses to let pain define who he becomes next.",
+    themes: ["perseverance", "trauma", "free will", "the struggle to remain human"],
+  },
+  {
+    id: "achilles",
+    name: "Achilles",
+    source: "Greek Mythology",
+    category: "Mythology",
+    emotions: ["pride", "rage", "purpose", "mortality", "honor"],
+    quote: "I will not fight for Agamemnon's glory.",
+    description: "The greatest warrior who hated fighting for someone else's cause.",
+    themes: ["purpose", "pride", "mortality", "choosing your battles"],
+  },
+  {
+    id: "odysseus",
+    name: "Odysseus",
+    source: "Greek Mythology",
+    category: "Mythology",
+    emotions: ["longing", "perseverance", "cunning", "exile", "home"],
+    quote: "There is a time for many words, and there is also a time for sleep.",
+    description: "The man of twists and turns, forever journeying home to a life that may no longer exist.",
+    themes: ["journey", "homecoming", "cunning", "endurance"],
+  },
+  {
+    id: "bojack",
+    name: "BoJack Horseman",
+    source: "BoJack Horseman",
+    category: "TV",
+    emotions: ["depression", "self-loathing", "nostalgia", "regret", "loneliness"],
+    quote: "It gets easier. Every day it gets a little easier. But you gotta do it every day — that's the hard part.",
+    description: "A faded star drowning in the person he used to be and the damage he's caused.",
+    themes: ["addiction", "self-sabotage", "the past", "change is hard"],
+  },
+  {
+    id: "siddhartha",
+    name: "Siddhartha",
+    source: "Siddhartha by Hermann Hesse",
+    category: "Literature",
+    emotions: ["searching", "identity", "peace", "wisdom", "transformation"],
+    quote: "I can think. I can wait. I can fast.",
+    description: "A man who spent his life searching for himself across many lives and identities.",
+    themes: ["self-discovery", "spirituality", "the journey inward", "letting go"],
+  },
+  {
+    id: "arthur-morgan",
+    name: "Arthur Morgan",
+    source: "Red Dead Redemption 2",
+    category: "Games",
+    emotions: ["redemption", "mortality", "loyalty", "regret", "change"],
+    quote: "We can't change what's done. We can only move on.",
+    description: "An outlaw who spent his final days trying to become someone worth remembering.",
+    themes: ["redemption", "mortality", "legacy", "choosing who to be"],
+  },
+  {
+    id: "batman",
+    name: "Bruce Wayne",
+    source: "Batman",
+    category: "Comics",
+    emotions: ["grief", "justice", "obsession", "isolation", "duty"],
+    quote: "It's not who I am underneath, but what I do that defines me.",
+    description: "A man who turned tragedy into purpose, forever defined by the night his parents died.",
+    themes: ["trauma", "justice", "identity", "the mask we wear"],
+  },
+  {
+    id: "luffy",
+    name: "Monkey D. Luffy",
+    source: "One Piece",
+    category: "Anime",
+    emotions: ["freedom", "loyalty", "dreams", "joy", "perseverance"],
+    quote: "I don't want to conquer anything. I just think the guy with the most freedom in this ocean is the Pirate King!",
+    description: "A dreamer who inspires others to believe in impossible things.",
+    themes: ["freedom", "friendship", "dreams", "never giving up"],
+  },
+  {
+    id: "eren",
+    name: "Eren Yeager",
+    source: "Attack on Titan",
+    category: "Anime",
+    emotions: ["rage", "freedom", "sacrifice", "transformation", "determination"],
+    quote: "If you win, you live. If you lose, you die. If you don't fight, you can't win.",
+    description: "A boy who wanted freedom so badly he became the very thing he fought against.",
+    themes: ["freedom", "cycle of violence", "sacrifice", "the cost of ideals"],
+  },
+  {
+    id: "sisyphus",
+    name: "Sisyphus",
+    source: "Greek Mythology",
+    category: "Mythology",
+    emotions: ["futility", "perseverance", "defiance", "absurdity", "endurance"],
+    quote: "One must imagine Sisyphus happy.",
+    description: "Condemned to push a boulder uphill forever — and finding meaning in the struggle itself.",
+    themes: ["absurdism", "perseverance", "meaning in struggle", "defiance"],
+  },
+  {
+    id: "mandela",
+    name: "Nelson Mandela",
+    source: "History",
+    category: "History",
+    emotions: ["forgiveness", "perseverance", "hope", "leadership", "patience"],
+    quote: "I learned that courage was not the absence of fear, but the triumph over it.",
+    description: "Imprisoned for 27 years, he emerged not with bitterness but with a vision for reconciliation.",
+    themes: ["forgiveness", "perseverance", "leadership", "transformation"],
+  },
+  {
+    id: "camus",
+    name: "Meursault",
+    source: "The Stranger by Albert Camus",
+    category: "Literature",
+    emotions: ["absurdity", "detachment", "honesty", "alienation", "acceptance"],
+    quote: "I opened myself to the gentle indifference of the world.",
+    description: "A man who refused to perform emotions society expected, finding peace in absurd honesty.",
+    themes: ["absurdism", "authenticity", "society's expectations", "acceptance"],
+  },
+  {
+    id: "musashi",
+    name: "Miyamoto Musashi",
+    source: "History / Vagabond",
+    category: "History",
+    emotions: ["discipline", "solitude", "mastery", "searching", "strength"],
+    quote: "Do nothing that is of no use.",
+    description: "Japan's greatest swordsman who spent his life seeking perfection through relentless practice.",
+    themes: ["mastery", "discipline", "solitude", "the way of the warrior"],
+  },
+];
+
+export function getCharacterById(id: string): Character | undefined {
+  return characters.find((c) => c.id === id);
+}
+
+export function searchCharacters(query: string): Character[] {
+  const q = query.toLowerCase();
+  return characters.filter(
+    (c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.source.toLowerCase().includes(q) ||
+      c.emotions.some((e) => e.includes(q)) ||
+      c.themes.some((t) => t.includes(q))
+  );
+}
