@@ -1,15 +1,18 @@
-import { NextResponse } from "next/server";
-import { generateDailyStory } from "@/lib/groq";
+import { NextRequest, NextResponse } from "next/server";
+import { getChapterForToday, getRandomChapter } from "@/lib/knowledge-base/daily-chapters";
 
-export async function GET() {
-  try {
-    const story = await generateDailyStory();
-    return NextResponse.json(story);
-  } catch (error) {
-    console.error("Daily story error:", error);
-    return NextResponse.json(
-      { error: "Today's story hasn't arrived yet. Please try again." },
-      { status: 500 }
-    );
-  }
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const mode = searchParams.get("mode");
+  const exclude = searchParams.get("exclude") ?? undefined;
+
+  const chapter =
+    mode === "random" ? getRandomChapter(exclude) : getChapterForToday();
+
+  return NextResponse.json({
+    ...chapter,
+    chapterNumber: Math.floor(
+      (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+    ),
+  });
 }
